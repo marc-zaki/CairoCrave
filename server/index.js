@@ -15,7 +15,7 @@ const inventoryRoutes = require('./routes/inventory.route');
 
 // Connecting MongoDB Database
 mongoose
-  .connect(process.env.MONGO_URI || 'mongodb+srv://student:ESL_Student135@cluster0.mojfpip.mongodb.net/?retryWrites=true&w=majority')
+  .connect(process.env.MONGO_URI)
   .then((x) => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })

@@ -28,7 +28,7 @@ router.route('/signup').post(async (req, res, next) => {
         // Generate JWT
         const token = jwt.sign(
           { userId: data._id, role: data.role },
-          process.env.JWT_SECRET || 'cairo_crave_secret_key_12345',
+          process.env.JWT_SECRET,
           { expiresIn: '1h' }
         );
         res.status(201).json({ user: data, token });
@@ -59,7 +59,7 @@ router.route('/login').post(async (req, res, next) => {
     // Generate JWT
     const token = jwt.sign(
       { userId: user._id, role: user.role },
-      process.env.JWT_SECRET || 'cairo_crave_secret_key_12345',
+      process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
 
