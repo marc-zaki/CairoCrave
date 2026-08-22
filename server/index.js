@@ -17,10 +17,10 @@ const inventoryRoutes = require('./routes/inventory.route');
 mongoose
   .connect(process.env.MONGO_URI)
   .then((x) => {
-    console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
+    console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`);
   })
   .catch((err) => {
-    console.error('Error connecting to mongo', err.message)
+    console.error('Error connecting to mongo', err.message);
   });
 
 const app = express();
@@ -29,13 +29,6 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(cors());
-
-// API Endpoints
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/menu', menuRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/inventory', inventoryRoutes);
 
 // Socket.IO Setup
 const server = http.createServer(app);
@@ -48,16 +41,27 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
   console.log('A user connected via socket.io:', socket.id);
 
+  socket.on('table_status_change', (data) => {
+    io.emit('table_updated', data);
+  });
+
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
   });
 });
 
-// Pass io to request object if routes need to emit events
+// Pass io to request object BEFORE routes so handlers can emit
 app.use((req, res, next) => {
   req.io = io;
   next();
 });
+
+// API Endpoints
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/menu', menuRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/inventory', inventoryRoutes);
 
 // 404 Error
 app.use((req, res, next) => {
@@ -74,5 +78,5 @@ app.use(function (err, req, res, next) {
 // PORT
 const port = process.env.PORT || 4000;
 server.listen(port, () => {
-  console.log('Connected to port ' + port)
+  console.log('Connected to port ' + port);
 });

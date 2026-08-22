@@ -10,6 +10,8 @@ import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-ro
 import AuthScreen from './components/AuthScreen';
 import POSSimulator from './components/POSSimulator';
 import KitchenDisplaySystem from './components/KitchenDisplaySystem';
+import TableManagement from './components/TableManagement';
+import DeliveryDispatcher from './components/DeliveryDispatcher';
 import ManagerDashboard from './components/ManagerDashboard';
 
 function App() {
@@ -26,42 +28,52 @@ function App() {
     <div className="App bg-light min-vh-100">
       <Router>
         <header className="App-header mb-4">
-          <Navbar bg="white" variant="light" className="shadow-sm">
-            <Container>
+          <Navbar bg="white" variant="light" className="shadow-sm border-bottom">
+            <Container fluid className="px-4">
               <Navbar.Brand>
-                <Link to={'/'} className="nav-link text-primary fw-bold">
-                  Cairo Crave
+                <Link to={'/'} className="nav-link text-primary fw-bold fs-4 d-flex align-items-center">
+                  🍔 Cairo Crave
                 </Link>
               </Navbar.Brand>
 
-              <Nav className="justify-content-end align-items-center">
+              <Nav className="justify-content-end align-items-center gap-1">
                 {!token ? (
                   <Nav>
-                    <Link to={'/login'} className="nav-link">
+                    <Link to={'/login'} className="nav-link fw-bold">
                       Login
                     </Link>
                   </Nav>
                 ) : (
                   <>
                     <Nav>
-                      <Link to={'/pos'} className="nav-link">
-                        POS Simulator
+                      <Link to={'/pos'} className="nav-link fw-bold">
+                        POS Terminal
                       </Link>
                     </Nav>
                     <Nav>
-                      <Link to={'/'} className="nav-link">
+                      <Link to={'/'} className="nav-link fw-bold">
                         Kitchen Display
+                      </Link>
+                    </Nav>
+                    <Nav>
+                      <Link to={'/tables'} className="nav-link fw-bold text-dark">
+                        Tables & Floor
+                      </Link>
+                    </Nav>
+                    <Nav>
+                      <Link to={'/delivery'} className="nav-link fw-bold text-dark">
+                        Delivery Hub
                       </Link>
                     </Nav>
                     {role === 'Manager' && (
                       <Nav>
-                        <Link to={'/dashboard'} className="nav-link text-primary">
+                        <Link to={'/dashboard'} className="nav-link text-primary fw-bold">
                           Manager Analytics
                         </Link>
                       </Nav>
                     )}
-                    <Nav>
-                      <button onClick={handleLogout} className="btn btn-link nav-link text-danger">
+                    <Nav className="ms-2">
+                      <button onClick={handleLogout} className="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold">
                         Logout
                       </button>
                     </Nav>
@@ -79,6 +91,12 @@ function App() {
             </Route>
             <Route exact path="/pos">
               {!token ? <Redirect to="/login" /> : <POSSimulator />}
+            </Route>
+            <Route exact path="/tables">
+              {!token ? <Redirect to="/login" /> : <TableManagement />}
+            </Route>
+            <Route exact path="/delivery">
+              {!token ? <Redirect to="/login" /> : <DeliveryDispatcher />}
             </Route>
             <Route exact path="/dashboard">
               {!token || role !== 'Manager' ? <Redirect to="/login" /> : <ManagerDashboard />}

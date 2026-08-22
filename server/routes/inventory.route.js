@@ -1,17 +1,17 @@
-let express = require('express'),
-  router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-let inventorySchema = require('../models/Inventory');
+const inventorySchema = require('../models/Inventory');
 
 // CREATE Inventory Item
-router.route('/create-inventory').post((req, res, next) => {
-  inventorySchema.create(req.body, (error, data) => {
-    if (error) {
-      return next(error);
-    } else {
-      res.json(data);
-    }
-  });
+router.route('/create-inventory').post(async (req, res, next) => {
+  try {
+    const data = await inventorySchema.create(req.body);
+    if (req.io) req.io.emit('inventory_updated', data);
+    res.status(201).json(data);
+  } catch (error) {
+    next(error);
+  }
 });
 
 // READ Inventory Items
@@ -43,10 +43,12 @@ router.route('/update-inventory/:id').put((req, res, next) => {
     {
       $set: req.body,
     },
+    { new: true },
     (error, data) => {
       if (error) {
         return next(error);
       } else {
+        if (req.io) req.io.emit('inventory_updated', data);
         res.json(data);
       }
     }
@@ -59,6 +61,7 @@ router.route('/delete-inventory/:id').delete((req, res, next) => {
     if (error) {
       return next(error);
     } else {
+      if (req.io) req.io.emit('inventory_updated', { _id: req.params.id, deleted: true });
       res.status(200).json({
         msg: data,
       });

@@ -12,7 +12,11 @@ const inventorySchema = new Schema({
   },
   unit: {
     type: String,
-    required: true // e.g., "kg", "pcs"
+    required: true // e.g., "kg", "pcs", "cans", "liters", "portions"
+  },
+  costPerUnit: {
+    type: Number,
+    default: 0 // Cost per unit in EGP for COGS calculation
   },
   threshold: {
     type: Number,

@@ -1,0 +1,19 @@
+{
+  "name": "cairocrave",
+  "version": "1.0.0",
+  "description": "CairoCrave Restaurant Management System",
+  "scripts": {
+    "server": "npm start --prefix server",
+    "client": "npm start --prefix client",
+    "start": "npx -y concurrently -n \"SERVER,CLIENT\" -c \"blue.bold,magenta.bold\" \"npm run server\" \"npm run client\"",
+    "dev": "npm start"
+  },
+  "keywords": [
+    "cairocrave",
+    "pos",
+    "kds",
+    "restaurant"
+  ],
+  "author": "",
+  "license": "ISC"
+}

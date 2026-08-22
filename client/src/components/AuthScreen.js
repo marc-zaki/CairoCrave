@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { Card, Form, Button, Alert, Row, Col } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 const AuthScreen = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({ username: '', email: '', password: '', role: 'Cook' });
   const [error, setError] = useState('');
-  const history = useHistory();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
